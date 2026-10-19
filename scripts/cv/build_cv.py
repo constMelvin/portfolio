@@ -108,7 +108,14 @@ def write_docx(body):
     os.makedirs(os.path.dirname(DOCX), exist_ok=True)
     with zipfile.ZipFile(TEMPLATE) as src, zipfile.ZipFile(DOCX, "w", zipfile.ZIP_DEFLATED) as dst:
         for item in src.infolist():
-            data = xml.encode("utf-8") if item.filename == "word/document.xml" else src.read(item)
+            if item.filename == "word/document.xml":
+                data = xml.encode("utf-8")
+            elif item.filename == "word/numbering.xml":
+                # The template's bullet font lacks "●", so Word falls back to Arial anyway; naming
+                # Arial makes LibreOffice (CI) use its metric twin, Liberation Sans, instead of a taller font
+                data = src.read(item).decode("utf-8").replace("Noto Sans Symbols", "Arial").encode("utf-8")
+            else:
+                data = src.read(item)
             dst.writestr(item, data)
 
 

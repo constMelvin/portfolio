@@ -52,7 +52,7 @@ jobs:
         if: github.event_name != 'schedule'
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq --no-install-recommends libreoffice-writer fontconfig > /dev/null
+          sudo apt-get install -y -qq --no-install-recommends libreoffice-writer fontconfig fonts-liberation > /dev/null
           # Install the exact fonts embedded in the template (Garamond + Noto Sans Symbols for bullets)
           mkdir -p ~/.local/share/fonts
           unzip -o -j -q scripts/cv/template.docx 'word/fonts/*' -d ~/.local/share/fonts
