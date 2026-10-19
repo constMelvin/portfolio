@@ -1,0 +1,212 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@font-face {
+  font-family: "Geist Pixel";
+  src: url("https://cdn.jsdelivr.net/gh/vercel/geist-pixel-font@main/fonts/webfonts/GeistPixel-Square.woff2")
+    format("woff2");
+  font-display: swap;
+}
+
+:root {
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Monochrome "ink & paper" palette (RGB triplets) */
+  --paper: 255 255 255;
+  --ink: 10 10 10;
+  --g50: 249 250 251;
+  --g100: 243 244 246;
+  --g200: 229 231 235;
+  --g300: 209 213 219;
+  --g400: 156 163 175;
+  --g500: 107 114 128;
+  --g600: 82 82 82;
+  --g700: 55 65 81;
+  --halftone: rgba(10, 10, 10, 0.9);
+
+  /* GitHub contribution graph levels 0–4 */
+  --gh-0: #ebedf0;
+  --gh-1: #9be9a8;
+  --gh-2: #40c463;
+  --gh-3: #30a14e;
+  --gh-4: #216e39;
+  --gh-stroke: rgba(27, 31, 35, 0.06);
+
+  /* shadcn tokens, mapped onto the palette */
+  --radius: 0.625rem;
+  --background: rgb(var(--paper));
+  --foreground: rgb(var(--ink));
+  --card: rgb(var(--paper));
+  --card-foreground: rgb(var(--ink));
+  --popover: rgb(var(--paper));
+  --popover-foreground: rgb(var(--ink));
+  --primary: rgb(var(--ink));
+  --primary-foreground: rgb(var(--paper));
+  --secondary: rgb(var(--g100));
+  --secondary-foreground: rgb(var(--ink));
+  --muted: rgb(var(--g100));
+  --muted-foreground: rgb(var(--g500));
+  --accent: rgb(var(--g100));
+  --accent-foreground: rgb(var(--ink));
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: rgb(var(--g200));
+  --input: rgb(var(--g200));
+  --ring: rgb(var(--g400));
+}
+
+.dark {
+  --paper: 12 12 15;
+  --ink: 244 244 245;
+  --g50: 20 20 24;
+  --g100: 28 28 33;
+  --g200: 39 39 45;
+  --g300: 63 63 70;
+  --g400: 113 113 122;
+  --g500: 150 150 160;
+  --g600: 184 184 192;
+  --g700: 212 212 218;
+  --halftone: rgba(244, 244, 245, 0.42);
+
+  --gh-0: #161b22;
+  --gh-1: #0e4429;
+  --gh-2: #006d32;
+  --gh-3: #26a641;
+  --gh-4: #39d353;
+  --gh-stroke: rgba(255, 255, 255, 0.05);
+  --destructive: oklch(0.704 0.191 22.216);
+}
+
+@theme inline {
+  --font-sans: "Geist", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", monospace;
+  --font-pixel: "Geist Pixel", "Geist Mono", monospace;
+
+  --color-paper: rgb(var(--paper));
+  --color-ink: rgb(var(--ink));
+  --color-gray-50: rgb(var(--g50));
+  --color-gray-100: rgb(var(--g100));
+  --color-gray-200: rgb(var(--g200));
+  --color-gray-300: rgb(var(--g300));
+  --color-gray-400: rgb(var(--g400));
+  --color-gray-500: rgb(var(--g500));
+  --color-gray-600: rgb(var(--g600));
+  --color-gray-700: rgb(var(--g700));
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply m-0 p-0 overflow-x-hidden bg-paper font-sans text-ink antialiased;
+  }
+  ::selection {
+    @apply bg-ink text-paper;
+  }
+}
+
+@layer components {
+  /* Dotted halftone texture used for the page backdrop and dividers */
+  .halftone {
+    background-image: radial-gradient(circle at center, var(--halftone) 1px, transparent 1.6px);
+    background-size: 9px 9px;
+  }
+  .halftone-wide {
+    background-size: 13px 13px;
+  }
+  .mask-tr {
+    mask-image: radial-gradient(ellipse 80% 80% at 100% 0%, #000 0%, transparent 65%);
+  }
+  .mask-bl {
+    mask-image: radial-gradient(ellipse 80% 80% at 0% 100%, #000 0%, transparent 65%);
+  }
+  .mask-fade-x {
+    mask-image: linear-gradient(to right, transparent, #000 30%, #000 70%, transparent);
+  }
+  .mask-circle {
+    mask-image: radial-gradient(circle at center, #000 35%, transparent 70%);
+  }
+}
+
+/* Hero entrance — pure CSS so content never stays hidden if JS is slow */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.reveal {
+  opacity: 0;
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--d, 0) * 80ms);
+}
+/* Sidebar: arrow slides in on the active page link */
+@keyframes nav-arrow-in {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+}
+.nav-arrow {
+  animation: nav-arrow-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Tour spotlight + card fade in */
+@keyframes tour-in {
+  from {
+    opacity: 0;
+  }
+}
+.tour-in {
+  animation: tour-in 0.25s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    animation: none;
+  }
+}

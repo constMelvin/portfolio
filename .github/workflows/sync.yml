@@ -1,0 +1,94 @@
+# Keeps the CV PDF and the GitHub contributions graph in sync with the website,
+# then commits the results — Vercel redeploys on that commit.
+#
+#  - on push to main:     regenerate the CV if src/data changed (LibreOffice)
+#  - every day 00:00 PHT: refresh the contributions graph
+#  - manually (Actions → Sync CV & GitHub graph → Run workflow)
+#
+# The graph needs a token that can read your private repos: create a fine-grained
+# personal access token (Contents: read-only, all repositories) and save it as the
+# repo secret GH_STATS_TOKEN. Without it the graph step is skipped.
+name: Sync CV & GitHub graph
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/data/**"
+      - "scripts/cv/**"
+  schedule:
+    - cron: "0 16 * * *" # 00:00 Asia/Manila
+  workflow_dispatch:
+    inputs:
+      preview:
+        description: "Build the CV with LibreOffice and upload it as an artifact, without committing"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      GH_STATS_TOKEN: ${{ secrets.GH_STATS_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install LibreOffice (CV → PDF)
+        if: github.event_name != 'schedule'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends libreoffice-writer fonts-ebgaramond > /dev/null
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Refresh GitHub contributions graph
+        if: github.event_name != 'push' && env.GH_STATS_TOKEN != ''
+        env:
+          GH_TOKEN: ${{ env.GH_STATS_TOKEN }}
+        run: npm run github:sync
+
+      - name: Regenerate CV (only if the website data changed)
+        if: github.event_name != 'schedule' && !inputs.preview
+        run: npm run cv -- --if-changed
+
+      - name: Build CV preview
+        if: inputs.preview
+        run: npm run cv
+
+      - name: Upload CV preview
+        if: inputs.preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: cv-preview
+          path: |
+            public/John-Melvin-Domingo-CV.pdf
+            cv/John-Melvin-Domingo-CV.docx
+
+      - name: Commit changes
+        if: ${{ !inputs.preview }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/John-Melvin-Domingo-CV.pdf public/github-activity.json cv/
+          if git diff --cached --quiet; then
+            echo "Nothing to update"
+          else
+            git commit -m "chore: sync CV and GitHub graph"
+            git push
+          fi

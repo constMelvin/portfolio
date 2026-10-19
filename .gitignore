@@ -1,0 +1,55 @@
+# Dependencies & build output
+node_modules
+dist
+dist-ssr
+*.tsbuildinfo
+
+# Environment variables & secrets (tokens, API keys) — never commit these
+.env
+.env.*
+!.env.example
+*.local
+*.pem
+
+# Vercel CLI
+.vercel
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Python (scripts/cv)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Word / LibreOffice temp & lock files (e.g. while the CV .docx is open)
+~$*
+.~lock.*#
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Kept on purpose (generated, but the deployed site needs them):
+#   public/John-Melvin-Domingo-CV.pdf, cv/, public/github-activity.json
+
+# Unused wallpaper — not part of the site
+public/profile.jpg
