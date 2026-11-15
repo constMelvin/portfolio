@@ -4,6 +4,7 @@
 import {
   BriefcaseBusiness,
   Car,
+  Fish,
   Globe,
   GraduationCap,
   MapPin,
@@ -236,8 +237,8 @@ export const experience: TimelineItem[] = [
       "Built Arduino and ESP32 projects for classes and school activities — sensors, relays, LCD displays and motors, including an Arduino-controlled water pump",
     ],
     description:
-      "Arduino and ESP32 projects for Computer Engineering classes and school activities — wiring sensors, relays, LCD displays and motors, including an Arduino-controlled water pump.",
-    skills: ["Arduino", "ESP32", "Embedded C/C++", "IoT", "Sensors"],
+      "Arduino and ESP32 projects for Computer Engineering classes and school activities — wiring sensors, relays, LCD displays and motors, including an Arduino-controlled water pump and a two-board aquaponics water quality monitor (pH, TDS, temperature and ultrasonic water level).",
+    skills: ["Arduino", "ESP32", "Embedded C/C++", "IoT", "Sensors", "I²C"],
   },
 ];
 
@@ -360,6 +361,16 @@ export const projects: Project[] = [
     tags: ["Thesis", "Livestreaming", "Hardware", "Full-stack"], // TODO: swap for the real stack
     badge: "Thesis · In progress",
     cv: false, // on the CV under Education (thesis note)
+  },
+  {
+    name: "Aquaponics Water Quality Monitor",
+    icon: Fish,
+    tagline:
+      "Two-Arduino monitor for a tilapia and pechay aquaponics tank: pH, TDS, water temperature and ultrasonic water level on a 20x4 LCD, with LED and buzzer alarms tuned for the fish and plants. A wave filter steadies the level reading against pump ripples, and every sensor is calibrated over serial and saved in EEPROM.",
+    tags: ["Arduino", "C++", "Sensors", "I²C", "EEPROM", "IoT"],
+    badge: "Hardware",
+    year: "2026",
+    cv: false, // keeps the CV to one page; covered by Hardware & IoT Projects
   },
   {
     name: "Parking System",
